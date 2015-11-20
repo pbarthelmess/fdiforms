@@ -1,0 +1,22 @@
+#!/bin/sh
+
+# Download kernel
+vmlinuz_url="http://ftp.heanet.ie/pub/centos/6/os/x86_64/images/pxeboot/vmlinuz"
+initrd_url="http://ftp.heanet.ie/pub/centos/6/os/x86_64/images/pxeboot/initrd.img"
+
+mkdir -p /boot/
+curl $vmlinuz_url > /boot/comodit-vmlinuz
+curl $initrd_url > /boot/comodit-initrd.img
+
+# Setup boot
+cat << EOF > /boot/grub/menu.lst
+default 0
+timeout 0
+title Kernel
+ root (hd0,0)
+ kernel /boot/comodit-vmlinuz ks=https://fdiforms-my.sharepoint.com/personal/paulo_barthelmess_fielddataintegrators_com/_layouts/15/guestaccess.aspx?guestaccesstoken=tAiT2ESDl3duussPX%2bXmM0no3Obxi%2bPgsZ8TqMuJqpM%3d&docid=0a63c00fbfc6049c5b6af2c784f6ffdd7
+ initrd /boot/comodit-initrd.img
+EOF
+
+# Restart
+reboot
